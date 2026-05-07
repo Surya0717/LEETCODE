@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> maxValue(vector<int>& nums) {
+        int n = nums.size();
+
+        vector<int> maxLeft(n);
+        vector<int> minRight(n);
+
+        maxLeft[0] = nums[0];
+        minRight[n - 1] = nums[n - 1];
+
+        for (int i = 1; i < n; i++) {
+            maxLeft[i] = max(nums[i], maxLeft[i - 1]);
+        }
+
+        for (int i = n - 2; i >= 0; i--) {
+            minRight[i] = min(nums[i], minRight[i + 1]);
+        }
+
+        vector<int> ans(n);
+        ans[n - 1] = maxLeft[n - 1];
+
+        for (int i = n - 2; i >= 0; i--) {
+            if (maxLeft[i] <= minRight[i + 1]) {
+                ans[i] = maxLeft[i];
+            } else {
+                ans[i] = ans[i + 1];
+            }
+        }
+
+        return ans;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter size of array: ";
+    cin >> n;
+
+    vector<int> nums(n);
+    cout << "Enter " << n << " elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    Solution obj;
+    vector<int> result = obj.maxValue(nums);
+
+    cout << "Output: ";
+    for (int x : result) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
